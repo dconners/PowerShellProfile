@@ -29,8 +29,7 @@ function Update-Self
 
     try
     {
-        $client = New-Object System.Net.WebClient
-        $client.DownloadFile("https://raw.githubusercontent.com/dconners/PowerShellProfile/master/profile.ps1",$profile)
+        Invoke-WebRequest -Uri "https://git.io/JtnjQ" -OutFile $profile
         Write-Host "Updated profile, please restart PowerShell"
     }
     catch
