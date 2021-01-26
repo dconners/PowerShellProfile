@@ -29,7 +29,8 @@ function Update-Self
 
     try
     {
-        Invoke-WebRequest -Uri "https://git.io/JtnjQ" -OutFile $profile
+        #https://raw.githubusercontent.com/dconners/PowerShellProfile/master/profile.ps1
+        Invoke-WebRequest -Uri "https://git.io/dacprofile" -OutFile $profile
         Write-Host "Updated profile, please restart PowerShell"
     }
     catch
