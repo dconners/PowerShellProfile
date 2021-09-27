@@ -57,7 +57,7 @@ function goto
         $Depth=3
     )
     
-    $choices = Get-ChildItem -Path \ -Directory -Depth $Depth | ? Name -Match $Folder | Sort-Object FullName
+    $choices = Get-ChildItem -Path \ -Directory -Depth $Depth | Where-Object Name -Match $Folder | Sort-Object FullName
     
     if ($choices.Count -eq 0)
     {
@@ -133,3 +133,8 @@ if ($Install)
         Write-Error "Error installing profile`n$_"
     }
 }
+
+#Optional module imports. Import if present
+
+#PScolors for pretty colors in get-childitem. Explicit import since otherwise will lose custom prompt function
+if (Get-Module -Name PSColors -ListAvailable) {Import-Module PSColors -Function Get-ChildItem}
