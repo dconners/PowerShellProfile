@@ -59,10 +59,10 @@ function goto
     #Get the list of directories to search
     $searchFolders = @($env:USERPROFILE)
     #get the script path
-    $scriptDir = Split-Path $MyInvocation.MyCommand.Path -Parent
-    if (Test-Path "$scriptDir\goto.lst")
+    $profileDir = Split-Path $profile -Parent
+    if (Test-Path "$profileDir\goto.lst")
     {
-        Get-Content "$scriptDir\goto.lst" | ForEach-Object {$searchFolders += $_}
+        Get-Content "$profileDir\goto.lst" | ForEach-Object {$searchFolders += $_}
     }
     
     $choices = @()
