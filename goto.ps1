@@ -4,10 +4,11 @@ param (
     [string]
     $Folder,
     [int]
-    $Depth=3
+    $Depth=4
 )
 
-$choices = Get-ChildItem -Path \ -Directory -Depth $Depth | ? Name -Match $Folder | Sort-Object FullName
+
+$choices = Get-ChildItem -Path \ -Directory -Depth $Depth -Filter "$($folder)*" -ErrorAction SilentlyContinue | Sort-Object FullName
 
 if ($choices.Count -eq 0)
 {
