@@ -6,13 +6,24 @@ function prompt
     $path = $pwd.Path.Replace($Home,"~")
     $path = $path.Replace("OneDrive - Ravenswood Technology Group, LLC","OneDriveRTG")
 
-    #Use the Verbose color settings and show the working directory
-    write-host -f ($host.PrivateData.VerboseForegroundColor) -b ($host.PrivateData.VerboseBackgroundColor) $path
+    #Determine the colors for our fancy prompt
+    $PathFG = $host.PrivateData.VerboseForegroundColor
+    $PathBG = $host.PrivateData.VerboseBackgroundColor
+    $AdminFG = $host.PrivateData.ErrorForegroundColor
+    $AdminBG = $host.PrivateData.ErrorBackgroundColor
+
+    #Fix undefined background colors
+    #So far only happens on linux
+    if ($PathBG -eq -1) {$PathBG = "Black"}
+    if ($AdminBG -eq -1) {$AdminBG = "Black"}
+
+    #Display the abbreviated path
+    write-host -f $PathFG -b $PathBG $path
 
     #Tag the prompt when in Admin mode
     if (Test-Administrator)
     {
-        write-host -f ($host.PrivateData.ErrorForegroundColor) -b ($host.PrivateData.ErrorBackgroundColor) -n "[ADMIN]"
+        write-host -f $AdminFG -b $AdminBG -n "[ADMIN]"
     }
 
     ">"
@@ -41,8 +52,16 @@ function Update-Self
 }
 
 function Test-Administrator
-{    
-    return ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
+{
+    #this doesn't work on non windows platforms so check first
+    #TODO Check if there is some sudo equivalent
+    if (test-path env:os -and $env:os -eq "Windows_NT"){
+        return ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
+    }
+    else {
+        return $false
+    }    
+
 }
 
 # quick navigation function
